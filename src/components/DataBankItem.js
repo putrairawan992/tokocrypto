@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 export default class DataBankItem extends Component {
 
     getDataAccount = () => {
-        this.props.getDataAccount(this.props.account)
+        this.props.getDataAccount(this.props.account, this.props.index)
     }
 
     deleteAccount = (name) => {

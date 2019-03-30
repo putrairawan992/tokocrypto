@@ -65,46 +65,54 @@ class App extends Component {
   }
 
 
-  getDataAccount = (account) => {
-    
-    // Set account based on holder name as id for update
-    this.setState({ selectedAccount: account })
-    
-    // Set toggle update
-    if(this.state.selectedAccount){
-      this.setState({ onDataUpdate: true})
-    } else {
-      this.setState({ onDataUpdate: false})
+  getDataAccount = (account, index) => {
+    const toggleUpdate = () => {
+       // Set toggle update
+        if(this.state.selectedAccount){
+          this.setState({ onDataUpdate: true})
+        } else {
+          this.setState({ onDataUpdate: false})
+        }
     }
+    // Set account based on holder name as id for update
+    this.setState({ selectedAccount: account, indexSelectedAccount:  index }, toggleUpdate )
+    
+   
   }
 
   updateDataAccount = (data) => {
     // Get copy for accounts
-    const accountCopy = this.state.accounts.map((account) => {
+    const { accounts, selectedAccount, indexSelectedAccount } =  this.state
+    console.log('current account', data, selectedAccount, indexSelectedAccount)
+    accounts.splice(indexSelectedAccount, 1, data)
+    // const accountCopy = this.state.accounts.map((account, index) => {
       
-      // Update account
-      if (account.name === data.name) {
-        account.number = data.number;
-        account.code = data.code;
-        account.address = data.address;
-        account.city = data.city;
-        account.country = data.country;
-        account.currency = data.currency;
-        account.type = data.type;
-        account.first = data.first;
-        account.last = data.last;
-        account.company = data.company;
-      }
-      return account
-    })
+    //   // Update account
+    //   if (account.name === data.name) {
+    //     account.number = data.number;
+    //     account.code = data.code;
+    //     account.address = data.address;
+    //     account.city = data.city;
+    //     account.country = data.country;
+    //     account.currency = data.currency;
+    //     account.type = data.type;
+    //     account.first = data.first;
+    //     account.last = data.last;
+    //     account.company = data.company;
+    //   }
+    //   return account
+    // })
+
+
 
     // Set state accounts
     this.setState((prevState, props) => ({
-      accounts: accountCopy
+      accounts: accounts
     }));
 
     // Push to localstorage for update
-    localStorage.setItem('accounts', JSON.stringify(accountCopy));
+    console.log('acount copy',accounts)
+    localStorage.setItem('accounts', JSON.stringify(accounts));
   }
 
   render() {
@@ -114,7 +122,7 @@ class App extends Component {
 
           <div className="row">
             <div className="col-md-12">
-              <DataBank accounts={this.state.accounts} onDelete={(name) => this.onDeleteAccount(name)} getDataAccount={(account) => this.getDataAccount(account)} />
+              <DataBank accounts={this.state.accounts} onDelete={(name) => this.onDeleteAccount(name)} getDataAccount={(account, index) => this.getDataAccount(account, index)} />
             </div>
           </div>
 
